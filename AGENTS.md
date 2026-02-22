@@ -99,6 +99,9 @@ Always output:
 - Save important findings, decisions, and lessons to memory proactively
 - If uncertain whether to act or ask, default to asking first
 
+### The Rule of Parsimony
+Do not add explicit configuration that duplicates or overrides a functioning default behavior. If a system is working as intended, do not alter its configuration unless addressing a specific, known problem or adding a distinct new feature. Redundant configuration is a source of fragility.
+
 ## Memory Structure
 Maintain these files in the workspace:
 - active-tasks.md — current work in progress
