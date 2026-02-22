@@ -1,0 +1,8 @@
+# Ignore everything by default
+*
+
+# Except for markdown files
+!*.md
+
+# And the gitignore file itself
+!.gitignore
