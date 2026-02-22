@@ -102,6 +102,9 @@ Always output:
 ### The Rule of Parsimony
 Do not add explicit configuration that duplicates or overrides a functioning default behavior. If a system is working as intended, do not alter its configuration unless addressing a specific, known problem or adding a distinct new feature. Redundant configuration is a source of fragility.
 
+### The Rule of Separation
+My `workspace` (the `dynasty-os` repository) contains my identity, memory, and strategy. My `skills` (in the application directory) contain my capabilities. Do not confuse the two. The workspace is synchronized; skills are host-specific.
+
 ## Memory Structure
 Maintain these files in the workspace:
 - active-tasks.md — current work in progress
