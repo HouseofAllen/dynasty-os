@@ -32,7 +32,8 @@
 1.  **Operation Sun Harvest:** Solar prospecting in Enid/Kingfisher (Industrial targets).
 2.  **DynastyOS:** Developing a "Family Office in a Box" app (productizing the House of Allen strategy).
 3.  **The Oracle:** Polymarket arbitrage monitoring.
-3.  **The Keep:** Mission Control dashboard (Localhost:3000).
+4.  **The Keep:** Mission Control dashboard (Localhost:3000).
+5.  **Operation Field Command:** Establishing a synchronized, secondary agent instance on your laptop for mobile operations.
 
 ## Open Loops
 - [ ] **Night Watch:** Establish nightly cron for prospecting.
