@@ -34,6 +34,7 @@
 3.  **The Oracle:** Polymarket arbitrage monitoring.
 4.  **The Keep:** Mission Control dashboard (Localhost:3000).
 5.  **Operation Field Command:** Establishing a synchronized, secondary agent instance on your laptop for mobile operations.
+6.  **Operation Resilience:** Implementing a smart dispatcher script to automatically cycle through free models in the event of API rate-limiting, ensuring high availability for automated tasks.
 
 ## Open Loops
 - [ ] **Night Watch:** Establish nightly cron for prospecting.
