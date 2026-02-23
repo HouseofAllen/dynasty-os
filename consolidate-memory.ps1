@@ -32,4 +32,8 @@ try {
     exit 1
 }
 
+# On success, log the execution
+$LogMessage = "Royal Chronicler successfully dispatched at $(Get-Date -Format 'o')"
+$LogMessage | Out-File -FilePath "SystemLogs/chronicler-last-run.log" -Encoding utf8
+
 exit 0

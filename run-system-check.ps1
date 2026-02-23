@@ -6,12 +6,13 @@
 $ErrorActionPreference = "Stop"
 
 # Define the location of the OpenClaw cron job state file.
-# This file contains the history and status of recent job runs.
 $CronStateFile = "C:\Users\User\.openclaw\cron\state.json"
 
 if (-not (Test-Path -Path $CronStateFile)) {
-    Write-Error "CRITICAL: Cron state file not found at $CronStateFile. Cannot perform system check."
-    exit 1
+    $LogMessage = "System Heartbeat check ran at $(Get-Date -Format 'o'), but cron state file was not found. This is normal on a fresh system. No check performed."
+    Write-Output $LogMessage
+    $LogMessage | Out-File -FilePath "SystemLogs/heartbeat-last-run.log" -Encoding utf8
+    exit 0
 }
 
 # Load the job history from the state file.
@@ -46,8 +47,8 @@ foreach ($job in $CronState.history) {
 
 if ($FailedJobs.Count -gt 0) {
     # If failures are found, construct a detailed alert message.
-    $AlertMessage = "🚨 **SYSTEM ALERT: Critical Protocol Failure Detected** `n`"
-    $AlertMessage += "The following automated jobs have failed within the last 24 hours:`n`"
+    $AlertMessage = "🚨 **SYSTEM ALERT: Critical Protocol Failure Detected**"
+    $AlertMessage += "`nThe following automated jobs have failed within the last 24 hours:"
     
     foreach ($failure in $FailedJobs) {
         $AlertMessage += "`n- **Job:** $($failure.Name)"
@@ -67,5 +68,9 @@ if ($FailedJobs.Count -gt 0) {
 } else {
     Write-Output "System check complete. All critical protocols are nominal."
 }
+
+# Log the successful execution of the check itself
+$LogMessage = "System Heartbeat check completed successfully at $(Get-Date -Format 'o')"
+$LogMessage | Out-File -FilePath "SystemLogs/heartbeat-last-run.log" -Encoding utf8
 
 exit 0

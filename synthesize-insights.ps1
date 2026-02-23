@@ -50,4 +50,8 @@ try {
     exit 1
 }
 
+# On success, log the execution
+$LogMessage = "The Alchemist successfully dispatched at $(Get-Date -Format 'o')"
+$LogMessage | Out-File -FilePath "SystemLogs/alchemist-last-run.log" -Encoding utf8
+
 exit 0
