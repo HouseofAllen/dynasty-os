@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaudio Mission Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f1f5f9 0%, #dbeafe 50%, #e2e8f0 100%); min-height: 100vh; overflow: hidden; }
+        .glass-panel { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05); }
+        .glass-header { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255, 255, 255, 0.6); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.5); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.8); }
+        @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } } .animate-pulse-soft { animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.6; }
+        .orb-1 { top: -10%; left: -5%; width: 500px; height: 500px; background: rgba(147, 197, 253, 0.4); } .orb-2 { top: 30%; right: -10%; width: 400px; height: 400px; background: rgba(216, 180, 254, 0.4); } .orb-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: rgba(103, 232, 249, 0.3); }
+        .pixelated { image-rendering: pixelated; }
+    </style>
+</head>
+<body class="text-slate-800">
+    <div class="orb orb-1"></div> <div class="orb orb-2"></div> <div class="orb orb-3"></div>
+    <div class="h-screen flex flex-col">
+        <header class="glass-header px-8 py-4 flex items-center justify-between z-50">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg text-white font-bold text-lg">Z</div>
+                <div><h1 class="font-bold text-slate-800 leading-tight">OpenClaudio</h1><p class="text-xs text-slate-500 font-medium tracking-wide uppercase">Mission Control</p></div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 text-sm font-medium text-slate-600"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse-soft"></span>Gateway Online</div>
+                <div class="flex items-center gap-2 text-sm font-medium text-slate-600"><span class="w-2 h-2 rounded-full bg-blue-500"></span>Telegram Active</div>
+            </div>
+            <nav class="flex p-1 bg-white/30 backdrop-blur-md rounded-xl border border-white/50">
+                <button onclick="setTab('kanban')" id="tab-kanban" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white/40">📋 Task Board</button>
+                <button onclick="setTab('offices')" id="tab-offices" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white/40">🏢 Agent Offices</button>
+                <button onclick="setTab('leads')" id="tab-leads" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white/40">☀️ Solar Leads</button>
+                <button onclick="setTab('gigs')" id="tab-gigs" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white/40">💰 Gigs</button>
+                <button onclick="setTab('docs')" id="tab-docs" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:text-slate-900 hover:bg-white/40">📂 Documents</button>
+            </nav>
+        </header>
+        <main class="flex-1 p-8 overflow-hidden relative">
+            <div id="view-agents" class="view-panel h-full hidden">
+                <!-- Content for Throne Room, if any, would go here. For now, it's just the Offices view logic. -->
+            </div>
+            <div id="view-offices" class="view-panel h-full flex gap-6 overflow-y-auto">
+                <!-- This will be populated by renderAgentOffices -->
+            </div>
+            <div id="view-kanban" class="view-panel h-full"><div class="flex gap-6 h-full overflow-x-auto pb-2">
+                <div class="glass-panel w-80 flex-shrink-0 rounded-2xl flex flex-col"><div class="p-4 border-b border-white/50 font-semibold text-slate-700 flex justify-between"><span>To Do</span><span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs" id="count-todo">0</span></div><div class="p-3 space-y-3 flex-1 overflow-y-auto" id="col-todo"></div><div class="p-3 border-t border-white/30"><button onclick="addTask()" class="w-full py-2 rounded-lg border-2 border-dashed border-slate-300 text-slate-500 hover:border-blue-400 hover:text-blue-600 text-sm font-medium transition-all">+ New Task</button></div></div>
+                <div class="glass-panel w-80 flex-shrink-0 rounded-2xl flex flex-col"><div class="p-4 border-b border-white/50 font-semibold text-slate-700 flex justify-between"><span>In Progress</span><span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs" id="count-progress">0</span></div><div class="p-3 space-y-3 flex-1 overflow-y-auto" id="col-progress"></div></div>
+                <div class="glass-panel w-80 flex-shrink-0 rounded-2xl flex flex-col opacity-80"><div class="p-4 border-b border-white/50 font-semibold text-slate-700 flex justify-between"><span>Done</span><span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs" id="count-done">0</span></div><div class="p-3 space-y-3 flex-1 overflow-y-auto" id="col-done"></div></div>
+            </div></div>
+            <div id="view-leads" class="view-panel h-full hidden"><div class="glass-panel h-full rounded-2xl flex flex-col overflow-hidden"><div class="px-6 py-4 border-b border-white/50 bg-white/20 flex justify-between items-center"><span class="font-semibold text-slate-700 text-lg">Solar Leads</span><div class="flex gap-4 text-xs font-medium text-slate-500"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded">50+ Potential Sites</span></div></div><div class="flex-1 overflow-y-auto p-6"><table class="w-full text-left text-sm text-slate-700"><thead class="bg-white/40 text-xs uppercase font-semibold text-slate-500"><tr><th class="px-4 py-3 rounded-tl-lg">Business Name</th><th class="px-4 py-3">Location</th><th class="px-4 py-3">Type</th><th class="px-4 py-3 rounded-tr-lg">Action</th></tr></thead><tbody class="divide-y divide-white/50" id="leads-list"></tbody></table></div></div></div>
+            <div id="view-gigs" class="view-panel h-full hidden"><div class="glass-panel h-full rounded-2xl flex flex-col overflow-hidden"><div class="px-6 py-4 border-b border-white/50 bg-white/20 flex justify-between items-center"><span class="font-semibold text-slate-700 text-lg">Contract Gigs</span><div class="flex gap-4 text-xs font-medium text-slate-500"><span class="bg-amber-100 text-amber-700 px-2 py-1 rounded">From Upwork</span></div></div><div class="flex-1 overflow-y-auto p-6"><table class="w-full text-left text-sm text-slate-700"><thead class="bg-white/40 text-xs uppercase font-semibold text-slate-500"><tr><th class="px-4 py-3 rounded-tl-lg w-2/5">Title</th><th class="px-4 py-3 w-3/5">Description</th><th class="px-4 py-3">Tags</th><th class="px-4 py-3 rounded-tr-lg">Action</th></tr></thead><tbody class="divide-y divide-white/50" id="gigs-list"></tbody></table></div></div></div>
+            <div id="view-docs" class="view-panel h-full hidden"><div class="glass-panel h-full rounded-2xl flex overflow-hidden"><div class="w-64 border-r border-white/50 bg-white/20 flex flex-col"><div class="p-4 font-semibold text-slate-700 border-b border-white/40">Files</div><div class="p-2 space-y-1" id="file-list"></div></div><div class="flex-1 p-8 overflow-y-auto bg-white/10"><div class="max-w-3xl mx-auto bg-white/60 min-h-[800px] shadow-sm rounded-xl p-10 border border-white/50"><h1 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-3" id="doc-title"></h1><div class="prose prose-slate max-w-none" id="doc-content"></div></div></div></div></div>
+        </main>
+    </div>
+    <script>
+        // ... (API and other functions remain the same) ...
+
+        async function renderAgentOffices() {
+            const container = document.getElementById('view-offices');
+            container.innerHTML = '<p class="text-slate-500">Loading agent data...</p>';
+
+            const tasksData = await API.getTasks();
+            const allTasks = [...tasksData.todo, ...tasksData['in-progress'], ...tasksData.done];
+
+            const agents = {};
+            allTasks.forEach(task => {
+                const assignee = task.assignee || 'Unassigned';
+                if (!agents[assignee]) {
+                    agents[assignee] = { todo: [], 'in-progress': [], done: [] };
+                }
+                if (tasksData.todo.find(t => t.id === task.id)) agents[assignee].todo.push(task);
+                else if (tasksData['in-progress'].find(t => t.id === task.id)) agents[assignee]['in-progress'].push(task);
+                else agents[assignee].done.push(task);
+            });
+            
+            container.innerHTML = '';
+            const agentNames = Object.keys(agents);
+            container.className = `view-panel h-full grid grid-cols-${agentNames.length} gap-6 overflow-y-auto`;
+
+            for (const agentName of agentNames) {
+                const agent = agents[agentName];
+                const agentHtml = `
+                    <div class="flex flex-col gap-6">
+                        <div class="glass-panel rounded-2xl flex flex-col">
+                            <div class="p-4 border-b border-white/50 font-semibold text-slate-700 flex justify-between items-center">
+                                <span>${agentName}'s Queued</span>
+                                <span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs">${agent.todo.length}</span>
+                            </div>
+                            <div class="p-3 space-y-3 flex-1 overflow-y-auto">
+                                ${agent.todo.map(t => taskCard(t)).join('') || '<p class="text-xs text-slate-400 p-2">No tasks.</p>'}
+                            </div>
+                        </div>
+                        <div class="glass-panel rounded-2xl flex flex-col">
+                            <div class="p-4 border-b border-white/50 font-semibold text-slate-700 flex justify-between items-center">
+                                <span>In Progress</span>
+                                <span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs">${agent['in-progress'].length}</span>
+                            </div>
+                            <div class="p-3 space-y-3 flex-1 overflow-y-auto">
+                                ${agent['in-progress'].map(t => taskCard(t)).join('') || '<p class="text-xs text-slate-400 p-2">No tasks.</p>'}
+                            </div>
+                        </div>
+                        <div class="glass-panel rounded-2xl flex flex-col opacity-80">
+                            <div class="p-4 border-b border-white/50 font-semibold text-slate-700 flex justify-between items-center">
+                                <span>Completed</span>
+                                <span class="bg-slate-200 text-slate-600 px-2 py-0.5 rounded text-xs">${agent.done.length}</span>
+                            </div>
+                            <div class="p-3 space-y-3 flex-1 overflow-y-auto">
+                                ${agent.done.map(t => taskCard(t, true)).join('') || '<p class="text-xs text-slate-400 p-2">No tasks.</p>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += agentHtml;
+            }
+        }
+
+        // ... (existing functions like taskCard, addTask, etc.) ...
+
+        function setTab(tabId) {
+            document.querySelectorAll('.view-panel').forEach(el => el.classList.add('hidden')); document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.querySelectorAll('nav button').forEach(el => { el.classList.remove('bg-white', 'shadow-sm', 'text-blue-600'); el.classList.add('text-slate-600'); });
+            const btn = document.getElementById(`tab-${tabId}`); btn.classList.add('bg-white', 'shadow-sm', 'text-blue-600'); btn.classList.remove('text-slate-600');
+            
+            if (tabId === 'kanban') initKanban(); 
+            if (tabId === 'offices') renderAgentOffices();
+            if (tabId === 'leads') loadLeads(); 
+            if (tabId === 'gigs') loadGigs();
+        }
+        
+        // ... (rest of the script) ...
+    </script>
+</body>
+</html>

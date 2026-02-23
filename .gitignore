@@ -1,8 +1,27 @@
 # Ignore everything by default
 *
 
-# Except for markdown files
+# But, un-ignore the following:
+#--------------------------------
+
+# All markdown files are our knowledge base
 !*.md
 
-# And the gitignore file itself
+# Core directories (and their contents) that define the system
+!Areas/
+!Projects/
+!Resources/
+
+# Key operational scripts
+!*.ps1
+!*.sh
+
+# The mission control UI
+!mission-control/
+!/mission-control/*
+
+# Allow nested tracking in mission control except for node_modules
+/mission-control/node_modules/
+
+# The gitignore file itself
 !.gitignore

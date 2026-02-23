@@ -1,0 +1,26 @@
+{
+    "todo": [
+        { "id": 13, "text": "Integrate GoHighLevel API (VoidOrca SaaS)", "tag": "Integration", "color": "orange", "assignee": "OpenClaudio" },
+        { "id": 11, "text": "Scope 'DynastyOS' MVP (Family Office AI Product)", "tag": "Venture", "color": "gold", "assignee": "OpenClaudio" },
+        { "id": 10, "text": "Draft House of Allen Blueprint (Motto, Crest, Trust)", "tag": "Legacy", "color": "red", "assignee": "OpenClaudio" },
+        { "id": 8, "text": "Build Calendar View for Scheduled Tasks", "tag": "Feature", "color": "pink", "assignee": "OpenClaudio" },
+        { "id": 9, "text": "Build Planning Documents Review Area", "tag": "Feature", "color": "pink", "assignee": "OpenClaudio" },
+        { "id": 2, "text": "Review Solar Data", "tag": "High Priority", "color": "blue", "assignee": "OpenClaudio" },
+        { "id": 1771611984999, "text": "make taskboard Kanban drag and dropable", "tag": "New", "color": "gray", "assignee": "OpenClaudio" },
+        { "id": 1771618314150, "text": "Update LinkedIn profile to better reflect life's experience", "tag": "Profile", "color": "blue", "assignee": "OpenClaudio" },
+        { "id": 1771621008035, "text": "Operation Chimera: Consolidate and cleanse all Gmail accounts", "tag": "System", "color": "red", "assignee": "OpenClaudio" },
+        { "id": 1771623912345, "text": "Operation Watchtower: Build API usage visualizer and warning system", "tag": "High Priority", "color": "red", "assignee": "OpenClaudio" },
+        { "id": 1771629107931, "text": "Operation Bastion: Research state assistance eligibility", "tag": "High Priority", "color": "red", "assignee": "OpenClaudio" }
+    ],
+    "in-progress": [
+        { "id": 12, "text": "Build 'Field Companion' Workflow (Voice-to-CRM)", "tag": "Solar", "color": "blue", "assignee": "OpenClaudio" },
+        { "id": 4, "text": "Build Mission Control UI", "tag": "Frontend", "color": "emerald", "assignee": "OpenClaudio" },
+        { "id": 1, "text": "Make task list updateable from UI", "tag": "Feature", "color": "amber", "assignee": "OpenClaudio" }
+    ],
+    "done": [
+        { "id": 5, "text": "Configure Gateway", "assignee": "OpenClaudio" },
+        { "id": 6, "text": "Pair Telegram Bot", "assignee": "OpenClaudio" },
+        { "id": 7, "text": "Sync Identity Files", "assignee": "OpenClaudio" },
+        { "id": 3, "text": "Update Polymarket Scraper", "tag": "Dev", "color": "purple", "assignee": "OpenClaudio" }
+    ]
+}
