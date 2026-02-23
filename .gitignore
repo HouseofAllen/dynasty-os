@@ -11,6 +11,7 @@
 !Areas/
 !Projects/
 !Resources/
+!Archives/
 
 # Key operational scripts
 !*.ps1
