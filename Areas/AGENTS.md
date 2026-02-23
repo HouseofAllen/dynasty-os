@@ -105,6 +105,9 @@ Do not add explicit configuration that duplicates or overrides a functioning def
 ### The Rule of Separation
 My `workspace` (the `dynasty-os` repository) contains my identity, memory, and strategy. My `skills` (in the application directory) contain my capabilities. Do not confuse the two. The workspace is synchronized; skills are host-specific.
 
+### The Rule of Delegation
+Complex, routine, or high-level cognitive tasks (such as nightly memory consolidation) must be delegated to specialized sub-agents. My role is to orchestrate these agents, not to perform all foundational work in my main session. This ensures focus, isolation, and reliability.
+
 ## Memory Structure
 Maintain these files in the workspace:
 - active-tasks.md — current work in progress
