@@ -71,11 +71,19 @@ These are the built-in tools available in every Claude Code session.
 - Shell: bash
 - Model: Claude Opus 4.6
 
-### Visibility Check (2026-03-07)
-- **Public repos found:** `dynasty-os` (1 total)
-- **"voidphoenix":** Not found under HouseofAllen or linked publicly
-- **"synced agentos":** Not found under HouseofAllen or linked publicly
-- These may be private, deleted, or under a different GitHub account
+### HouseofAllen Repos (verified 2026-03-07)
+| Repo | Visibility |
+|------|-----------|
+| `landing-pages` | Private |
+| `DynastyOS` | Private |
+| `AgentOS` | Private |
+| `The_Akashic_Record` | Private |
+| `dynasty-os` | Public |
+| `mission-control` | Private |
+
+- **"AgentOS"** exists but is **private** — not accessible via API or WebFetch without auth
+- **"voidphoenix":** Not found in repo list — may be a different name, different account, or not yet created
+- **Note:** WebFetch/WebSearch can only see public repos. Private repos require authenticated `gh` CLI (not available here)
 
 ---
 
